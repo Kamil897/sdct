@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STUDENT-CHAT</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --ink: #0a0c14;
+  --paper: #f5f3ee;
+  --cream: #ede9e0;
+  --accent: #6b5ce7;
+  --accent2: #00c2b3;
+  --accent3: #e85d8a;
+  --gold: #c9a84c;
+  --text: #1a1c28;
+  --muted: #6b6e80;
+  --border: rgba(0,0,0,0.1);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--paper);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  background: var(--ink);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(107,92,231,0.35) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 90% 80%, rgba(0,194,179,0.2) 0%, transparent 50%),
+    radial-gradient(ellipse 40% 30% at 10% 70%, rgba(232,93,138,0.15) 0%, transparent 50%);
+}
+
+/* Stars */
+.hero-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 15% 25%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 85% 15%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 45% 60%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 70% 80%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 30% 85%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 60% 35%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 20% 55%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 90% 45%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 55% 90%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 8% 40%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 75% 55%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 38% 15%, rgba(255,255,255,0.5) 0%, transparent 100%);
+}
+
+.hero-nav {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28px 48px;
+}
+
+.logo {
+  font-family: 'Instrument Serif', serif;
+  font-size: 20px;
+  color: #fff;
+  letter-spacing: 0.02em;
+}
+
+.logo span { color: var(--accent2); }
+
+.nav-badge {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 6px 14px;
+  border-radius: 100px;
+}
+
+.hero-body {
+  position: relative;
+  z-index: 10;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 60px 48px;
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent2);
+  margin-bottom: 32px;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.2s forwards;
+}
+
+.hero-eyebrow::before,
+.hero-eyebrow::after {
+  content: '';
+  width: 32px;
+  height: 1px;
+  background: var(--accent2);
+  opacity: 0.5;
+}
+
+.hero-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(52px, 9vw, 112px);
+  line-height: 0.95;
+  color: #fff;
+  margin-bottom: 12px;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.35s forwards;
+}
+
+.hero-title em {
+  font-style: italic;
+  background: linear-gradient(135deg, #a78bfa, var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(18px, 3vw, 28px);
+  font-style: italic;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 48px;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.5s forwards;
+}
+
+.hero-desc {
+  max-width: 520px;
+  font-size: 16px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.8;
+  margin-bottom: 52px;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.65s forwards;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 0;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  overflow: hidden;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.8s forwards;
+}
+
+.hero-stat {
+  padding: 20px 32px;
+  text-align: center;
+  border-right: 1px solid rgba(255,255,255,0.1);
+}
+
+.hero-stat:last-child { border-right: none; }
+
+.hero-stat-num {
+  font-family: 'Instrument Serif', serif;
+  font-size: 32px;
+  color: #fff;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.hero-stat-num span { color: var(--accent2); }
+
+.hero-stat-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+}
+
+.hero-scroll {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  animation: fadeUp 0.8s 1.1s forwards;
+}
+
+.hero-scroll span {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+}
+
+.scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+  animation: scrollPulse 2s infinite;
+}
+
+/* ── SECTIONS ── */
+section {
+  padding: 100px 48px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* ── PROBLEM ── */
+.section-problem {
+  max-width: 100%;
+  padding: 100px 0;
+  background: var(--cream);
+}
+
+.section-problem-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 48px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent3);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--accent3);
+  opacity: 0.3;
+  max-width: 40px;
+}
+
+h2 {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(32px, 4vw, 52px);
+  line-height: 1.1;
+  color: var(--ink);
+  margin-bottom: 24px;
+}
+
+h2 em { font-style: italic; color: var(--accent); }
+
+.problem-quote {
+  background: var(--ink);
+  color: #fff;
+  padding: 40px 48px;
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.problem-quote::before {
+  content: '"';
+  position: absolute;
+  top: -20px;
+  left: 24px;
+  font-family: 'Instrument Serif', serif;
+  font-size: 180px;
+  color: rgba(107,92,231,0.15);
+  line-height: 1;
+}
+
+.problem-quote p {
+  font-family: 'Instrument Serif', serif;
+  font-size: 22px;
+  font-style: italic;
+  line-height: 1.5;
+  color: rgba(255,255,255,0.9);
+  position: relative;
+  z-index: 1;
+}
+
+.problem-quote p span {
+  color: var(--accent2);
+  font-style: normal;
+  font-weight: 600;
+}
+
+/* ── SOLUTION ── */
+.solution-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  margin-top: 48px;
+}
+
+.solution-item {
+  background: var(--paper);
+  padding: 32px 28px;
+  transition: background 0.2s;
+}
+
+.solution-item:hover { background: #fff; }
+
+.solution-icon {
+  font-size: 28px;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.solution-title {
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 8px;
+  color: var(--ink);
+}
+
+.solution-desc {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ── AI ── */
+.section-ai {
+  max-width: 100%;
+  padding: 100px 0;
+  background: var(--ink);
+  color: #fff;
+}
+
+.section-ai-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.section-ai .section-label { color: var(--accent2); }
+.section-ai .section-label::after { background: var(--accent2); }
+.section-ai h2 { color: #fff; }
+
+.ai-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 48px;
+}
+
+.ai-card {
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 36px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s;
+}
+
+.ai-card:hover { border-color: rgba(107,92,231,0.4); }
+
+.ai-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(107,92,231,0.6), transparent);
+}
+
+.ai-card-name {
+  font-family: 'Instrument Serif', serif;
+  font-size: 36px;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.ai-card-role {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent2);
+  margin-bottom: 20px;
+}
+
+.ai-card-desc {
+  font-size: 14px;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+
+.ai-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.ai-tag {
+  font-size: 11px;
+  padding: 4px 12px;
+  border-radius: 100px;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.5);
+}
+
+.ai-hardware {
+  margin-top: 48px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 28px 36px;
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  flex-wrap: wrap;
+}
+
+.hw-label {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  margin-bottom: 6px;
+}
+
+.hw-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.75);
+}
+
+/* ── MONETIZATION ── */
+.mono-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 48px;
+}
+
+.mono-card {
+  border-radius: 20px;
+  padding: 36px;
+  position: relative;
+  overflow: hidden;
+}
+
+.mono-card.b2c {
+  background: var(--ink);
+  color: #fff;
+}
+
+.mono-card.b2b {
+  background: var(--cream);
+  border: 1px solid var(--border);
+}
+
+.mono-card-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mono-card.b2c .mono-card-label { color: var(--accent2); }
+.mono-card.b2b .mono-card-label { color: var(--accent); }
+
+.plan-row {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.plan-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+.plan-name {
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mono-card.b2c .plan-name { color: #fff; }
+.mono-card.b2b .plan-name { color: var(--ink); }
+
+.plan-items {
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mono-card.b2b .plan-items { color: var(--muted); }
+
+.plan-items span::before { content: '— '; opacity: 0.5; }
+
+/* ── ROADMAP ── */
+.section-roadmap {
+  max-width: 100%;
+  padding: 100px 0;
+  background: var(--cream);
+}
+
+.section-roadmap-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.roadmap-track {
+  margin-top: 64px;
+  position: relative;
+}
+
+.roadmap-track::before {
+  content: '';
+  position: absolute;
+  left: 140px;
+  top: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--accent), var(--accent2), transparent);
+}
+
+.roadmap-item {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 0;
+  margin-bottom: 48px;
+  position: relative;
+}
+
+.roadmap-date {
+  font-family: 'Instrument Serif', serif;
+  font-size: 18px;
+  font-style: italic;
+  color: var(--muted);
+  padding-right: 32px;
+  padding-top: 2px;
+  text-align: right;
+}
+
+.roadmap-dot {
+  position: absolute;
+  left: 133px;
+  top: 8px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 3px solid var(--cream);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.roadmap-item.current .roadmap-dot {
+  background: var(--accent2);
+  box-shadow: 0 0 0 1px var(--accent2), 0 0 12px rgba(0,194,179,0.4);
+  animation: pulse 2s infinite;
+}
+
+.roadmap-content {
+  padding-left: 40px;
+}
+
+.roadmap-quarter {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.roadmap-item.current .roadmap-quarter { color: var(--accent2); }
+
+.roadmap-title {
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.roadmap-bullets {
+  font-size: 13px;
+  color: var(--muted);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.roadmap-bullets span::before { content: '↗ '; }
+
+/* ── ACHIEVEMENTS ── */
+.achievements {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 48px;
+}
+
+.achievement {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  transition: box-shadow 0.2s;
+}
+
+.achievement:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+.achievement-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent2); }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--ink);
+  padding: 64px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+footer::before {
+  content: 'STUDENT\ACHIEV';
+  content: 'STUDENT-CHAT';
+  position: absolute;
+  font-family: 'Instrument Serif', serif;
+  font-size: 180px;
+  color: rgba(255,255,255,0.02);
+  white-space: nowrap;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  letter-spacing: -0.02em;
+}
+
+.footer-logo {
+  font-family: 'Instrument Serif', serif;
+  font-size: 28px;
+  color: #fff;
+  margin-bottom: 16px;
+}
+
+.footer-logo span { color: var(--accent2); }
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  margin-bottom: 32px;
+}
+
+.footer-links a {
+  font-size: 13px;
+  color: rgba(255,255,255,0.4);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover { color: var(--accent2); }
+
+.footer-copy {
+  font-size: 12px;
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 0.05em;
+}
+
+/* ── LANG TOGGLE ── */
+.lang-toggle {
+  display: flex;
+  align-items: center;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 100px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.lang-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.45);
+  padding: 7px 14px;
+  transition: all 0.2s;
+}
+.lang-btn.active { background: var(--accent2); color: var(--ink); }
+
+/* ── TEAM SECTION ── */
+.section-team {
+  max-width: 100%;
+  padding: 100px 0;
+  background: var(--paper);
+}
+.section-team-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+.team-tagline {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.8;
+  max-width: 600px;
+  margin-bottom: 48px;
+}
+
+/* ── FINANCIAL SECTION ── */
+.section-financial {
+  max-width: 100%;
+  padding: 100px 0;
+  background: var(--ink);
+}
+.section-financial-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+/* ── RESPONSIVE EXTRA ── */
+@media (max-width: 480px) {
+  h2 { font-size: 28px; }
+  .hero-title { font-size: 44px; }
+  .hero-stats { border: none; gap: 0; }
+  .hero-stat { border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; margin-bottom: 8px; }
+  .nav-badge { display: none; }
+  .lang-toggle { margin-left: auto; }
+  .problem-quote { padding: 28px 24px; }
+  .problem-quote p { font-size: 18px; }
+  .roadmap-track::before { left: 60px; }
+  .roadmap-item { grid-template-columns: 60px 1fr; }
+  .roadmap-dot { left: 53px; }
+  .roadmap-date { font-size: 12px; }
+  .ai-hardware { flex-direction: column; gap: 16px; }
+  .footer-links { flex-direction: column; gap: 12px; align-items: center; }
+  section { padding: 60px 20px; }
+  .section-team-inner,
+  .section-financial-inner,
+  .section-problem-inner,
+  .section-ai-inner,
+  .section-roadmap-inner { padding: 0 20px; }
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(1); }
+  50%       { opacity: 0.8; transform: scaleY(1.2); }
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 1px var(--accent2), 0 0 12px rgba(0,194,179,0.4); }
+  50%       { box-shadow: 0 0 0 1px var(--accent2), 0 0 24px rgba(0,194,179,0.7); }
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .hero-nav { padding: 20px 24px; }
+  .hero-body { padding: 40px 24px; }
+  .hero-stats { flex-direction: column; }
+  .hero-stat { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); }
+  .hero-stat:last-child { border-bottom: none; }
+
+  section { padding: 60px 24px; }
+  .section-problem-inner,
+  .section-ai-inner,
+  .section-roadmap-inner { padding: 0 24px; }
+  .section-problem-inner { grid-template-columns: 1fr; gap: 40px; }
+
+  .solution-grid { grid-template-columns: 1fr; }
+  .ai-cards { grid-template-columns: 1fr; }
+  .mono-grid { grid-template-columns: 1fr; }
+
+  .roadmap-track::before { left: 80px; }
+  .roadmap-item { grid-template-columns: 80px 1fr; }
+  .roadmap-date { font-size: 14px; }
+  .roadmap-dot { left: 73px; }
+
+  .ai-hardware { gap: 24px; }
+  footer { padding: 48px 24px; }
+  .footer-links { flex-direction: column; gap: 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ HERO ══ -->
+<div class="hero">
+  <div class="hero-bg"></div>
+
+  <nav class="hero-nav">
+    <div class="logo">STUDENT<span>·</span>CHAT</div>
+    <div style="display:flex;align-items:center;gap:16px;">
+      <div class="nav-badge">Tashkent · Uzbekistan · 2026</div>
+      <div class="lang-toggle">
+        <button class="lang-btn active" onclick="setLang('ru')">RU</button>
+        <button class="lang-btn" onclick="setLang('en')">EN</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="hero-body">
+    <div class="hero-eyebrow">Образовательная экосистема</div>
+    <h1 class="hero-title">От студента<br>к <em>специалисту</em></h1>
+    <p class="hero-sub">student-chat.online</p>
+    <p class="hero-desc">
+      Платформа, которая соединяет обучение с практикой — через AI-наставника, 
+      guild-систему, mentorship и реальные карьерные возможности.
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">10<span>+</span></div>
+        <div class="hero-stat-label">Команда</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">13<span>+</span></div>
+        <div class="hero-stat-label">Модулей</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">2<span>+</span></div>
+        <div class="hero-stat-label">Партнёра</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num"><span>IT</span></div>
+        <div class="hero-stat-label">Park Resident</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</div>
+
+<!-- ══ PROBLEM ══ -->
+<div class="section-problem">
+  <div class="section-problem-inner">
+    <div>
+      <div class="section-label">Проблема</div>
+      <h2>Порочный круг<br><em>без выхода</em></h2>
+      <p style="color: var(--muted); font-size: 15px; line-height: 1.8; margin-bottom: 24px;">
+        Обычные платформы дают теорию — но не дают среды для роста, 
+        стажировок, наставников и реального опыта работы.
+      </p>
+      <p style="color: var(--muted); font-size: 15px; line-height: 1.8;">
+        Компании не берут без опыта. Где взять опыт — никто не объясняет.
+        STUDENT-CHAT разрывает этот цикл.
+      </p>
+    </div>
+    <div class="problem-quote">
+      <p>
+        Чтобы получить работу — нужен <span>опыт</span>.<br>
+        Чтобы получить опыт — нужна <span>работа</span>.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SOLUTION ══ -->
+<section>
+  <div class="section-label" style="color: var(--accent);">Решение</div>
+  <h2>Всё что нужно<br>для <em>карьерного старта</em></h2>
+
+  <div class="solution-grid">
+    <div class="solution-item">
+      <span class="solution-icon">🤖</span>
+      <div class="solution-title">AI-наставник Mivelora</div>
+      <div class="solution-desc">Персональный AI-ассистент на локальном LLM. Работает офлайн, без внешних API.</div>
+    </div>
+    <div class="solution-item">
+      <span class="solution-icon">⚔️</span>
+      <div class="solution-title">Guild-система</div>
+      <div class="solution-desc">Командная работа, совместные проекты и соревнования внутри платформы.</div>
+    </div>
+    <div class="solution-item">
+      <span class="solution-icon">🧑‍🏫</span>
+      <div class="solution-title">Mentorship</div>
+      <div class="solution-desc">Прямая связь с опытными специалистами и менторами из индустрии.</div>
+    </div>
+    <div class="solution-item">
+      <span class="solution-icon">🗺️</span>
+      <div class="solution-title">Карьерный путь</div>
+      <div class="solution-desc">Персональный roadmap от текущего уровня до готовности к рынку труда.</div>
+    </div>
+    <div class="solution-item">
+      <span class="solution-icon">🏆</span>
+      <div class="solution-title">Турниры и квесты</div>
+      <div class="solution-desc">Геймификация обучения — ежедневные задачи, соревнования, лидерборды.</div>
+    </div>
+    <div class="solution-item">
+      <span class="solution-icon">💼</span>
+      <div class="solution-title">Стажировки</div>
+      <div class="solution-desc">Прямые internship-предложения от партнёрских компаний прямо в платформе.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ AI ══ -->
+<div class="section-ai">
+  <div class="section-ai-inner">
+    <div class="section-label">AI-инфраструктура</div>
+    <h2>Собственный AI.<br><em>Без внешних зависимостей.</em></h2>
+
+    <div class="ai-cards">
+      <div class="ai-card">
+        <div class="ai-card-name">Mivelora</div>
+        <div class="ai-card-role">Главный AI-ассистент платформы</div>
+        <div class="ai-card-desc">
+          Универсальный наставник — помогает с учёбой, карьерными вопросами, 
+          объясняет темы и адаптируется под каждого пользователя.
+        </div>
+        <div class="ai-tags">
+          <span class="ai-tag">Русский язык</span>
+          <span class="ai-tag">Qwen 2.5</span>
+          <span class="ai-tag">Локальный LLM</span>
+        </div>
+      </div>
+      <div class="ai-card">
+        <div class="ai-card-name">Zeltorin</div>
+        <div class="ai-card-role">AI English Tutor · CEFR A1–C2</div>
+        <div class="ai-card-desc">
+          Специализированный тьютор английского языка с автоматическим 
+          определением уровня и структурированными сессиями.
+        </div>
+        <div class="ai-tags">
+          <span class="ai-tag">CEFR Levels</span>
+          <span class="ai-tag">Session Summaries</span>
+          <span class="ai-tag">Error Logging</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ai-hardware">
+      <div>
+        <div class="hw-label">Процессор</div>
+        <div class="hw-value">Intel Core i5-12400F</div>
+      </div>
+      <div>
+        <div class="hw-label">Видеокарта</div>
+        <div class="hw-value">NVIDIA RTX 3070 · 8GB</div>
+      </div>
+      <div>
+        <div class="hw-label">Оперативная память</div>
+        <div class="hw-value">16 GB RAM</div>
+      </div>
+      <div>
+        <div class="hw-label">Движок</div>
+        <div class="hw-value">llama.cpp · Python</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TEAM ══ -->
+<div class="section-team">
+  <div class="section-team-inner">
+    <div class="section-label" style="color: var(--gold);" data-ru="Команда" data-en="Team">Команда</div>
+    <h2 data-ru="Текущий штат +<br><em>масштабирование</em>" data-en="Current team +<br><em>scaling up</em>">Текущий штат +<br><em>масштабирование</em></h2>
+    <p class="team-tagline" data-ru="От подготовки к IELTS до трудоустройства — весь путь пользователя строится внутри одной системы." data-en="From IELTS prep to employment — the entire user journey is built inside one system.">
+      От подготовки к IELTS до трудоустройства — весь путь пользователя строится внутри одной системы.
+    </p>
+    <div class="mono-grid">
+      <div class="mono-card b2c">
+        <div class="mono-card-label" data-ru="Сейчас · Core team" data-en="Now · Core team">Сейчас · Core team</div>
+        <div class="plan-row">
+          <div class="plan-name" data-ru="10+ человек" data-en="10+ people">10+ человек</div>
+          <div class="plan-items">
+            <span data-ru="CEO / Product Director" data-en="CEO / Product Director">CEO / Product Director</span>
+            <span data-ru="Frontend / Backend" data-en="Frontend / Backend">Frontend / Backend</span>
+            <span data-ru="DevOps Engineers" data-en="DevOps Engineers">DevOps Engineers</span>
+            <span data-ru="UI/UX Design" data-en="UI/UX Design">UI/UX Design</span>
+            <span data-ru="Development Lead" data-en="Development Lead">Development Lead</span>
+          </div>
+        </div>
+      </div>
+      <div class="mono-card b2b">
+        <div class="mono-card-label" data-ru="Следующий этап" data-en="Next stage">Следующий этап</div>
+        <div class="plan-row" style="border-bottom-color: var(--border);">
+          <div class="plan-name" data-ru="План расширения" data-en="Expansion plan">План расширения</div>
+          <div class="plan-items" style="color: var(--muted);">
+            <span data-ru="QA Engineers" data-en="QA Engineers">QA Engineers</span>
+            <span data-ru="Marketing Manager" data-en="Marketing Manager">Marketing Manager</span>
+            <span data-ru="Sales Manager (B2B)" data-en="Sales Manager (B2B)">Sales Manager (B2B)</span>
+            <span data-ru="Customer Support" data-en="Customer Support">Customer Support</span>
+            <span data-ru="Content Manager" data-en="Content Manager">Content Manager</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FINANCIAL ══ -->
+<div class="section-financial">
+  <div class="section-financial-inner">
+    <div class="section-label" data-ru="Финансовая модель" data-en="Financial model">Финансовая модель</div>
+    <h2 style="color:#fff;" data-ru="Монетизация уже<br><em>просчитана.</em>" data-en="Monetization already<br><em>planned out.</em>">Монетизация уже<br><em>просчитана.</em></h2>
+    <div class="ai-cards" style="margin-top:48px;">
+      <div class="ai-card">
+        <div class="ai-card-name">2026</div>
+        <div class="ai-card-role" data-ru="Projected Revenue" data-en="Projected Revenue">Projected Revenue</div>
+        <div class="ai-card-desc" data-ru="Доход формируется из подписок, внедрения ПО, доработки продукта и корпоративных B2B-партнёрств." data-en="Revenue is generated from subscriptions, software integration, product development, and corporate B2B partnerships.">
+          Доход формируется из подписок, внедрения ПО, доработки продукта и корпоративных B2B-партнёрств.
+        </div>
+        <div class="ai-tags">
+          <span class="ai-tag">150M+ UZS</span>
+          <span class="ai-tag">Subscriptions</span>
+          <span class="ai-tag">B2B Deals</span>
+        </div>
+      </div>
+      <div class="ai-card">
+        <div class="ai-card-name">Scaling</div>
+        <div class="ai-card-role" data-ru="Growth Strategy" data-en="Growth Strategy">Growth Strategy</div>
+        <div class="ai-card-desc" data-ru="Рост через университеты, школы, корпоративные программы, internship funnels и recruitment partnerships." data-en="Growth through universities, schools, corporate programs, internship funnels, and recruitment partnerships.">
+          Рост через университеты, школы, корпоративные программы, internship funnels и recruitment partnerships.
+        </div>
+        <div class="ai-tags">
+          <span class="ai-tag">B2C</span>
+          <span class="ai-tag">B2B</span>
+          <span class="ai-tag">Recruitment</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MONETIZATION ══ -->
+<section>
+  <div class="section-label" style="color: var(--gold);">Монетизация</div>
+  <h2>Две модели.<br><em>Один эффект.</em></h2>
+
+  <div class="mono-grid">
+    <div class="mono-card b2c">
+      <div class="mono-card-label">B2C — Подписки</div>
+      <div class="plan-row">
+        <div class="plan-name">⚡ Pro</div>
+        <div class="plan-items">
+          <span>Расширенный AI-ассистент</span>
+          <span>Персональный roadmap</span>
+          <span>Advanced mentorship</span>
+          <span>Premium tournaments</span>
+          <span>Карьерные рекомендации</span>
+        </div>
+      </div>
+      <div class="plan-row">
+        <div class="plan-name">🔥 Ultra</div>
+        <div class="plan-items">
+          <span>Priority mentorship</span>
+          <span>Реальные internship offers</span>
+          <span>Premium partner access</span>
+          <span>Закрытые карьерные программы</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="mono-card b2b">
+      <div class="mono-card-label">B2B — Компании</div>
+      <div class="plan-row" style="border-bottom-color: var(--border);">
+        <div class="plan-name">🏢 Для работодателей</div>
+        <div class="plan-items" style="color: var(--muted);">
+          <span>Hiring access к молодым талантам</span>
+          <span>Internship pipeline</span>
+          <span>Branded tournaments</span>
+          <span>Corporate mentorship</span>
+          <span>Recruitment funnels</span>
+        </div>
+      </div>
+      <div class="plan-row" style="border-bottom-color: var(--border);">
+        <div class="plan-name">🎓 Университеты</div>
+        <div class="plan-items" style="color: var(--muted);">
+          <span>University integrations</span>
+          <span>Event sponsorships</span>
+          <span>Educational partnerships</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ ACHIEVEMENTS ══ -->
+<div style="background: var(--ink); padding: 80px 48px;">
+  <div style="max-width: 1100px; margin: 0 auto;">
+    <div class="section-label" style="color: var(--accent2);">Достижения</div>
+    <h2 style="color: #fff;">Уже сделано.<br><em>И это только начало.</em></h2>
+    <div class="achievements" style="margin-top: 40px;">
+      <div class="achievement" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); color: #fff;">
+        <div class="achievement-dot"></div>Резидент IT Park Uzbekistan
+      </div>
+      <div class="achievement" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); color: #fff;">
+        <div class="achievement-dot"></div>Договор с Click
+      </div>
+      <div class="achievement" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); color: #fff;">
+        <div class="achievement-dot"></div>Pitch Day — первое партнёрство
+      </div>
+      <div class="achievement" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); color: #fff;">
+        <div class="achievement-dot"></div>Agile Scale & Innovation 2025
+      </div>
+      <div class="achievement" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); color: #fff;">
+        <div class="achievement-dot"></div>ITPU Open Day
+      </div>
+      <div class="achievement" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); color: #fff;">
+        <div class="achievement-dot"></div>Dev Hackathon
+      </div>
+      <div class="achievement" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); color: #fff;">
+        <div class="achievement-dot"></div>Cursor Event
+      </div>
+      <div class="achievement" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); color: #fff;">
+        <div class="achievement-dot"></div>13+ активных модулей
+      </div>
+      <div class="achievement" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); color: #fff;">
+        <div class="achievement-dot"></div>Собственная AI-инфраструктура
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ROADMAP ══ -->
+<div class="section-roadmap">
+  <div class="section-roadmap-inner">
+    <div class="section-label">Roadmap</div>
+    <h2>Куда идём<br><em>дальше</em></h2>
+
+    <div class="roadmap-track">
+      <div class="roadmap-item current">
+        <div class="roadmap-date">Q2 '26</div>
+        <div class="roadmap-dot"></div>
+        <div class="roadmap-content">
+          <div class="roadmap-quarter">Сейчас · Q2 2026</div>
+          <div class="roadmap-title">AI + Core стабилизация</div>
+          <div class="roadmap-bullets">
+            <span>Запуск полноценной Mivelora AI</span>
+            <span>Стабилизация LLM pipeline</span>
+            <span>Pixel Battle multiplayer</span>
+          </div>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-date">Q3 '26</div>
+        <div class="roadmap-dot"></div>
+        <div class="roadmap-content">
+          <div class="roadmap-quarter">Q3 2026</div>
+          <div class="roadmap-title">Закрытый Beta</div>
+          <div class="roadmap-bullets">
+            <span>Закрытый beta launch</span>
+            <span>Onboarding первых партнёров</span>
+            <span>Mentorship system expansion</span>
+          </div>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-date">Q4 '26</div>
+        <div class="roadmap-dot"></div>
+        <div class="roadmap-content">
+          <div class="roadmap-quarter">Q4 2026</div>
+          <div class="roadmap-title">Монетизация</div>
+          <div class="roadmap-bullets">
+            <span>Запуск подписок Pro / Ultra</span>
+            <span>B2B partnerships scaling</span>
+            <span>Recruitment system launch</span>
+          </div>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-date">Q1 '27</div>
+        <div class="roadmap-dot"></div>
+        <div class="roadmap-content">
+          <div class="roadmap-quarter">Q1 2027</div>
+          <div class="roadmap-title">Масштабирование 🎯</div>
+          <div class="roadmap-bullets">
+            <span>Региональный выход</span>
+            <span>Полноценный startup fundraising</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-logo">STUDENT<span>·</span>CHAT</div>
+  <div class="footer-links">
+    <a href="https://student-chat.online">student-chat.online</a>
+    <a href="https://t.me/student_chat_official">Telegram</a>
+    <a href="https://www.instagram.com/student_chat_official">Instagram</a>
+  </div>
+  <div class="footer-copy">© 2026 STUDENT-CHAT · Tashkent, Uzbekistan · IT Park Resident</div>
+</footer>
+
+<script>
+const translations = {
+  ru: {
+    'hero-eyebrow': 'Образовательная экосистема',
+    'hero-title': 'От студента<br>к <em>специалисту</em>',
+    'hero-sub': 'student-chat.online',
+    'hero-desc': 'Платформа, которая соединяет обучение с практикой — через AI-наставника, guild-систему, mentorship и реальные карьерные возможности.',
+    'stat-team': 'Команда',
+    'stat-modules': 'Модулей',
+    'stat-partners': 'Партнёра',
+    'stat-park': 'Park Resident',
+    'prob-label': 'Проблема',
+    'prob-h2': 'Порочный круг<br><em>без выхода</em>',
+    'prob-text1': 'Обычные платформы дают теорию — но не дают среды для роста, стажировок, наставников и реального опыта работы.',
+    'prob-text2': 'Компании не берут без опыта. Где взять опыт — никто не объясняет. STUDENT-CHAT разрывает этот цикл.',
+    'prob-quote': 'Чтобы получить работу — нужен <span>опыт</span>.<br>Чтобы получить опыт — нужна <span>работа</span>.',
+    'sol-label': 'Решение',
+    'sol-h2': 'Всё что нужно<br>для <em>карьерного старта</em>',
+    'ai-label': 'AI-инфраструктура',
+    'ai-h2': 'Собственный AI.<br><em>Без внешних зависимостей.</em>',
+    'hw-cpu': 'Процессор',
+    'hw-gpu': 'Видеокарта',
+    'hw-ram': 'Оперативная память',
+    'hw-engine': 'Движок',
+    'mono-label': 'Монетизация',
+    'mono-h2': 'Две модели.<br><em>Один эффект.</em>',
+    'ach-label': 'Достижения',
+    'ach-h2': 'Уже сделано.<br><em>И это только начало.</em>',
+    'road-label': 'Roadmap',
+    'road-h2': 'Куда идём<br><em>дальше</em>',
+    'road-now': 'Сейчас · Q2 2026',
+    'road-now-title': 'AI + Core стабилизация',
+    'road-q3': 'Q3 2026',
+    'road-q3-title': 'Закрытый Beta',
+    'road-q4': 'Q4 2026',
+    'road-q4-title': 'Монетизация',
+    'road-q1': 'Q1 2027',
+    'road-q1-title': 'Масштабирование 🎯',
+    'footer-copy': '© 2026 STUDENT-CHAT · Tashkent, Uzbekistan · IT Park Resident',
+  },
+  en: {
+    'hero-eyebrow': 'Educational Ecosystem',
+    'hero-title': 'From student<br>to <em>specialist</em>',
+    'hero-sub': 'student-chat.online',
+    'hero-desc': 'A platform that bridges learning and practice — through an AI mentor, guild system, mentorship, and real career opportunities.',
+    'stat-team': 'Team',
+    'stat-modules': 'Modules',
+    'stat-partners': 'Partners',
+    'stat-park': 'Park Resident',
+    'prob-label': 'Problem',
+    'prob-h2': 'A vicious cycle<br><em>with no exit</em>',
+    'prob-text1': 'Regular platforms offer theory — but no environment for growth, internships, mentors, or real work experience.',
+    'prob-text2': 'Companies won\'t hire without experience. Nobody explains where to get it. STUDENT-CHAT breaks that cycle.',
+    'prob-quote': 'To get a job — you need <span>experience</span>.<br>To get experience — you need a <span>job</span>.',
+    'sol-label': 'Solution',
+    'sol-h2': 'Everything needed<br>for a <em>career launch</em>',
+    'ai-label': 'AI Infrastructure',
+    'ai-h2': 'Our own AI.<br><em>No external dependencies.</em>',
+    'hw-cpu': 'CPU',
+    'hw-gpu': 'GPU',
+    'hw-ram': 'RAM',
+    'hw-engine': 'Engine',
+    'mono-label': 'Monetization',
+    'mono-h2': 'Two models.<br><em>One outcome.</em>',
+    'ach-label': 'Achievements',
+    'ach-h2': 'Already done.<br><em>And this is just the start.</em>',
+    'road-label': 'Roadmap',
+    'road-h2': 'Where we\'re<br><em>headed next</em>',
+    'road-now': 'Now · Q2 2026',
+    'road-now-title': 'AI + Core Stabilization',
+    'road-q3': 'Q3 2026',
+    'road-q3-title': 'Closed Beta',
+    'road-q4': 'Q4 2026',
+    'road-q4-title': 'Monetization',
+    'road-q1': 'Q1 2027',
+    'road-q1-title': 'Scaling 🎯',
+    'footer-copy': '© 2026 STUDENT-CHAT · Tashkent, Uzbekistan · IT Park Resident',
+  }
+};
+
+function setLang(lang) {
+  const t = translations[lang];
+
+  // Toggle button states
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
+
+  // Update all data-ru / data-en elements
+  document.querySelectorAll('[data-ru]').forEach(el => {
+    const val = lang === 'ru' ? el.dataset.ru : el.dataset.en;
+    if (val) el.innerHTML = val;
+  });
+
+  // Keyed elements
+  const map = {
+    '.hero-eyebrow': 'hero-eyebrow',
+    '.hero-title': 'hero-title',
+    '.hero-sub': 'hero-sub',
+    '.hero-desc': 'hero-desc',
+    '.stat-team': 'stat-team',
+    '.stat-modules': 'stat-modules',
+    '.stat-partners': 'stat-partners',
+    '.stat-park': 'stat-park',
+    '.prob-label': 'prob-label',
+    '.prob-h2': 'prob-h2',
+    '.prob-text1': 'prob-text1',
+    '.prob-text2': 'prob-text2',
+    '.prob-quote-text': 'prob-quote',
+    '.sol-label': 'sol-label',
+    '.sol-h2': 'sol-h2',
+    '.ai-label': 'ai-label',
+    '.ai-h2': 'ai-h2',
+    '.hw-cpu': 'hw-cpu',
+    '.hw-gpu': 'hw-gpu',
+    '.hw-ram': 'hw-ram',
+    '.hw-engine': 'hw-engine',
+    '.mono-label': 'mono-label',
+    '.mono-h2': 'mono-h2',
+    '.ach-label': 'ach-label',
+    '.ach-h2': 'ach-h2',
+    '.road-label': 'road-label',
+    '.road-h2': 'road-h2',
+    '.road-now': 'road-now',
+    '.road-now-title': 'road-now-title',
+    '.road-q3': 'road-q3',
+    '.road-q3-title': 'road-q3-title',
+    '.road-q4': 'road-q4',
+    '.road-q4-title': 'road-q4-title',
+    '.road-q1': 'road-q1',
+    '.road-q1-title': 'road-q1-title',
+    '.footer-copy': 'footer-copy',
+  };
+
+  Object.entries(map).forEach(([sel, key]) => {
+    const el = document.querySelector(sel);
+    if (el && t[key]) el.innerHTML = t[key];
+  });
+
+  // Solution items EN/RU
+  const solItems = {
+    ru: [
+      ['AI-наставник Mivelora', 'Персональный AI-ассистент на локальном LLM. Работает офлайн, без внешних API.'],
+      ['Guild-система', 'Командная работа, совместные проекты и соревнования внутри платформы.'],
+      ['Mentorship', 'Прямая связь с опытными специалистами и менторами из индустрии.'],
+      ['Карьерный путь', 'Персональный roadmap от текущего уровня до готовности к рынку труда.'],
+      ['Турниры и квесты', 'Геймификация обучения — ежедневные задачи, соревнования, лидерборды.'],
+      ['Стажировки', 'Прямые internship-предложения от партнёрских компаний прямо в платформе.'],
+    ],
+    en: [
+      ['AI Mentor Mivelora', 'Personal AI assistant on a local LLM. Works offline, no external APIs.'],
+      ['Guild System', 'Teamwork, collaborative projects and competitions inside the platform.'],
+      ['Mentorship', 'Direct access to experienced specialists and industry mentors.'],
+      ['Career Path', 'Personal roadmap from current level to market readiness.'],
+      ['Tournaments & Quests', 'Gamified learning — daily tasks, competitions, leaderboards.'],
+      ['Internships', 'Direct internship offers from partner companies inside the platform.'],
+    ]
+  };
+
+  document.querySelectorAll('.solution-item').forEach((item, i) => {
+    const data = solItems[lang][i];
+    if (data) {
+      item.querySelector('.solution-title').textContent = data[0];
+      item.querySelector('.solution-desc').textContent = data[1];
+    }
+  });
+
+  // Achievements EN
+  const achEN = [
+    'IT Park Uzbekistan Resident',
+    'Click Contract Signed',
+    'Pitch Day — first partnership',
+    'Agile Scale & Innovation 2025',
+    'ITPU Open Day',
+    'Dev Hackathon',
+    'Cursor Event',
+    '13+ active modules',
+    'Own AI infrastructure',
+  ];
+  const achRU = [
+    'Резидент IT Park Uzbekistan',
+    'Договор с Click',
+    'Pitch Day — первое партнёрство',
+    'Agile Scale & Innovation 2025',
+    'ITPU Open Day',
+    'Dev Hackathon',
+    'Cursor Event',
+    '13+ активных модулей',
+    'Собственная AI-инфраструктура',
+  ];
+
+  document.querySelectorAll('.achievement').forEach((el, i) => {
+    const dot = el.querySelector('.achievement-dot');
+    el.innerHTML = '';
+    el.appendChild(dot);
+    el.insertAdjacentText('beforeend', (lang === 'en' ? achEN : achRU)[i] || '');
+  });
+
+  // Roadmap bullets
+  const roadBullets = {
+    ru: [
+      ['Запуск полноценной Mivelora AI', 'Стабилизация LLM pipeline', 'Pixel Battle multiplayer'],
+      ['Закрытый beta launch', 'Onboarding первых партнёров', 'Mentorship system expansion'],
+      ['Запуск подписок Pro / Ultra', 'B2B partnerships scaling', 'Recruitment system launch'],
+      ['Региональный выход', 'Полноценный startup fundraising'],
+    ],
+    en: [
+      ['Full Mivelora AI launch', 'LLM pipeline stabilization', 'Pixel Battle multiplayer'],
+      ['Closed beta launch', 'Onboarding first partners', 'Mentorship system expansion'],
+      ['Pro / Ultra subscriptions launch', 'B2B partnerships scaling', 'Recruitment system launch'],
+      ['Regional expansion', 'Full startup fundraising'],
+    ]
+  };
+
+  document.querySelectorAll('.roadmap-bullets').forEach((el, i) => {
+    const bullets = roadBullets[lang][i];
+    if (bullets) el.innerHTML = bullets.map(b => `<span>${b}</span>`).join('');
+  });
+}
+</script>
+</body>
+</html>
